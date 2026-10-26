@@ -1,0 +1,802 @@
+{
+  "tools": [
+    {
+      "name": "browser_click",
+      "description": "Perform click on a web page",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "element": {
+            "type": "string",
+            "description": "Human-readable element description"
+          },
+          "ref": {
+            "type": "string",
+            "description": "Exact element reference from the latest snapshot"
+          }
+        },
+        "required": [
+          "element",
+          "ref"
+        ]
+      }
+    },
+    {
+      "name": "browser_clipboard_write",
+      "description": "Write text to the browser clipboard",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Text to write to the clipboard"
+          }
+        },
+        "required": [
+          "text"
+        ]
+      }
+    },
+    {
+      "name": "browser_close_tab",
+      "description": "Close a browser tab by its tab ID",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "tabId": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991,
+            "description": "Numeric ID of the tab to close"
+          }
+        },
+        "required": [
+          "tabId"
+        ]
+      }
+    },
+    {
+      "name": "browser_delete_cookie",
+      "description": "Delete a specific browser cookie by name",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the cookie to delete"
+          },
+          "url": {
+            "description": "Cookie URL (accepted for compatibility; deletion uses the active page)",
+            "type": "string"
+          },
+          "path": {
+            "description": "Cookie path (defaults to /)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "name": "browser_dialog_handle",
+      "description": "Handle a JavaScript dialog (alert, confirm, or prompt) by accepting or dismissing it",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "accept",
+              "dismiss"
+            ],
+            "description": "Dialog action: accept or dismiss"
+          },
+          "promptText": {
+            "description": "Text to enter in a prompt dialog",
+            "type": "string"
+          }
+        },
+        "required": [
+          "action"
+        ]
+      }
+    },
+    {
+      "name": "browser_drag",
+      "description": "Perform drag and drop between two elements",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "startElement": {
+            "type": "string",
+            "description": "Human-readable source description"
+          },
+          "startRef": {
+            "type": "string",
+            "description": "Source reference from the latest snapshot"
+          },
+          "endElement": {
+            "type": "string",
+            "description": "Human-readable target description"
+          },
+          "endRef": {
+            "type": "string",
+            "description": "Target reference from the latest snapshot"
+          }
+        },
+        "required": [
+          "startElement",
+          "startRef",
+          "endElement",
+          "endRef"
+        ]
+      }
+    },
+    {
+      "name": "browser_drag_drop",
+      "description": "Perform a drag-and-drop operation between two elements identified by CSS selectors",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "sourceSelector": {
+            "type": "string",
+            "description": "CSS selector of the drag source"
+          },
+          "targetSelector": {
+            "type": "string",
+            "description": "CSS selector of the drop target"
+          }
+        },
+        "required": [
+          "sourceSelector",
+          "targetSelector"
+        ]
+      }
+    },
+    {
+      "name": "browser_execute_in_frame",
+      "description": "Execute JavaScript code inside a specific iframe",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "frameId": {
+            "type": "string",
+            "description": "Target frame ID, HTML id attribute, or name"
+          },
+          "code": {
+            "type": "string",
+            "description": "JavaScript expression to evaluate in the frame"
+          }
+        },
+        "required": [
+          "frameId",
+          "code"
+        ]
+      }
+    },
+    {
+      "name": "browser_get_console_logs",
+      "description": "Get the console logs from the browser",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "browser_get_cookies",
+      "description": "Get all cookies for a specific URL",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "URL whose cookies should be read"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      }
+    },
+    {
+      "name": "browser_get_html",
+      "description": "Get the HTML content of the page or a specific element",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "selector": {
+            "description": "Target CSS selector (whole page by default)",
+            "type": "string"
+          },
+          "outerHTML": {
+            "description": "Return outerHTML instead of innerHTML (default: false)",
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    {
+      "name": "browser_get_storage",
+      "description": "Read localStorage and/or sessionStorage of the active tab",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "Storage to read: local, session, or both (default: both)",
+            "type": "string",
+            "enum": [
+              "local",
+              "session",
+              "both"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "browser_get_text",
+      "description": "Get the plain text content of the page or a specific element",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "selector": {
+            "description": "Target CSS selector (whole page by default)",
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "browser_go_back",
+      "description": "Go back to the previous page",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "browser_go_forward",
+      "description": "Go forward to the next page",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "browser_hover",
+      "description": "Hover over element on page",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "element": {
+            "type": "string",
+            "description": "Human-readable element description"
+          },
+          "ref": {
+            "type": "string",
+            "description": "Exact element reference from the latest snapshot"
+          }
+        },
+        "required": [
+          "element",
+          "ref"
+        ]
+      }
+    },
+    {
+      "name": "browser_list_tabs",
+      "description": "List all open browser tabs with their IDs, URLs, and titles",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "browser_navigate",
+      "description": "Navigate to a URL",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "HTTP(S) URL to navigate to"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      }
+    },
+    {
+      "name": "browser_network_clear",
+      "description": "Clear the captured network buffer without stopping an active capture.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "tabId": {
+            "description": "Tab to capture or inspect (active tab by default).",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        }
+      }
+    },
+    {
+      "name": "browser_network_detail",
+      "description": "Read a captured request including headers, query URL, POST data, response body, timing, errors and WebSocket frames. Bodies can be unavailable or truncated; see bodyError and truncated fields.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "tabId": {
+            "description": "Tab to capture or inspect (active tab by default).",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "requestId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Exact id returned by browser_network_list"
+          }
+        },
+        "required": [
+          "requestId"
+        ]
+      }
+    },
+    {
+      "name": "browser_network_export_har",
+      "description": "Export captured traffic as HAR 1.2. Returns HAR JSON, or writes a new file on the MCP server machine if filePath is supplied. Existing files are not overwritten. Timing phases are aggregated; unavailable fields use HAR sentinel values.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "tabId": {
+            "description": "Tab to capture or inspect (active tab by default).",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "filePath": {
+            "description": "Optional output .har file path on the MCP server machine",
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "browser_network_list",
+      "description": "List captured requests with IDs, URLs, methods, statuses, durations and failures. Supports filters and pagination. Use the returned id in browser_network_detail.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "tabId": {
+            "description": "Tab to capture or inspect (active tab by default).",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "url": {
+            "description": "URL substring filter",
+            "type": "string"
+          },
+          "method": {
+            "description": "HTTP method filter",
+            "type": "string"
+          },
+          "status": {
+            "description": "HTTP status filter",
+            "type": "integer",
+            "minimum": 100,
+            "maximum": 599
+          },
+          "resourceType": {
+            "description": "Resource type filter, e.g. Fetch, XHR, Document, WebSocket",
+            "type": "string"
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 500
+          }
+        }
+      }
+    },
+    {
+      "name": "browser_network_start",
+      "description": "Start network capture on a tab. Captures future HTTP requests, responses, failures and WebSocket messages. Reload the page afterwards to capture initial loading. Starting an already active capture preserves it; starting a stopped capture resets its buffer.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "tabId": {
+            "description": "Tab to capture or inspect (active tab by default).",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "captureBodies": {
+            "description": "Collect response bodies (default: true). Text is capped at 262144 characters per response, with 8388608 characters shared by response bodies and WebSocket frames.",
+            "type": "boolean"
+          },
+          "maxEntries": {
+            "description": "Maximum retained requests (1000 by default). Oldest requests are evicted.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5000
+          }
+        }
+      }
+    },
+    {
+      "name": "browser_network_stop",
+      "description": "Stop capture and release the debugger. Recorded requests and captured bodies remain available until clear, restart or extension reload.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "tabId": {
+            "description": "Tab to capture or inspect (active tab by default).",
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        }
+      }
+    },
+    {
+      "name": "browser_new_tab",
+      "description": "Open a new browser tab, optionally navigating to a URL",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "url": {
+            "description": "URL to open (defaults to about:blank)",
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "browser_press_key",
+      "description": "Press a key on the keyboard",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "Key name, e.g. ArrowLeft, Enter, a"
+          }
+        },
+        "required": [
+          "key"
+        ]
+      }
+    },
+    {
+      "name": "browser_reload",
+      "description": "Reload the current browser page, optionally with a hard refresh (cache bypass)",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "hard": {
+            "description": "Bypass the cache when reloading (default: false)",
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    {
+      "name": "browser_screenshot",
+      "description": "Take a screenshot of the current page",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "browser_screenshot_element",
+      "description": "Take a screenshot of a specific DOM element identified by a CSS selector",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "selector": {
+            "type": "string",
+            "description": "CSS selector of the target element"
+          }
+        },
+        "required": [
+          "selector"
+        ]
+      }
+    },
+    {
+      "name": "browser_screenshot_fullpage",
+      "description": "Capture a full-page screenshot (beyond the visible viewport)",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "browser_scroll",
+      "description": "Scroll the page or a specific element to given coordinates or into view",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "x": {
+            "description": "Horizontal scroll position in pixels (default: 0)",
+            "type": "number"
+          },
+          "y": {
+            "description": "Vertical scroll position in pixels",
+            "type": "number"
+          },
+          "selector": {
+            "description": "CSS selector to scroll into view (takes priority over x/y)",
+            "type": "string"
+          },
+          "behavior": {
+            "description": "Scroll behavior",
+            "type": "string",
+            "enum": [
+              "smooth",
+              "instant",
+              "auto"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "browser_select_option",
+      "description": "Select an option in a dropdown",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "element": {
+            "type": "string",
+            "description": "Human-readable element description"
+          },
+          "ref": {
+            "type": "string",
+            "description": "Exact element reference from the latest snapshot"
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Option values to select"
+          }
+        },
+        "required": [
+          "element",
+          "ref",
+          "values"
+        ]
+      }
+    },
+    {
+      "name": "browser_set_cookie",
+      "description": "Set or update a browser cookie",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Cookie name"
+          },
+          "value": {
+            "type": "string",
+            "description": "Cookie value"
+          },
+          "domain": {
+            "description": "Cookie domain, e.g. .example.com",
+            "type": "string"
+          },
+          "path": {
+            "description": "Cookie path (defaults to /)",
+            "type": "string"
+          },
+          "secure": {
+            "description": "Secure cookie (HTTPS only)",
+            "type": "boolean"
+          },
+          "httpOnly": {
+            "description": "HttpOnly flag (currently not supported by the document.cookie setter)",
+            "type": "boolean"
+          },
+          "sameSite": {
+            "description": "SameSite policy",
+            "type": "string",
+            "enum": [
+              "Strict",
+              "Lax",
+              "None"
+            ]
+          },
+          "expires": {
+            "description": "Expiry as a Unix timestamp in seconds",
+            "type": "number"
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ]
+      }
+    },
+    {
+      "name": "browser_snapshot",
+      "description": "Capture accessibility snapshot of the current page. Use this for getting references to elements to interact with.",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "browser_switch_tab",
+      "description": "Switch to a specific browser tab by its tab ID",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "tabId": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991,
+            "description": "Numeric ID of the tab to activate"
+          }
+        },
+        "required": [
+          "tabId"
+        ]
+      }
+    },
+    {
+      "name": "browser_type",
+      "description": "Type text into editable element",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "element": {
+            "type": "string",
+            "description": "Human-readable element description"
+          },
+          "ref": {
+            "type": "string",
+            "description": "Exact element reference from the latest snapshot"
+          },
+          "text": {
+            "type": "string",
+            "description": "Text to enter"
+          },
+          "submit": {
+            "type": "boolean",
+            "description": "Submit the associated form after typing"
+          }
+        },
+        "required": [
+          "element",
+          "ref",
+          "text",
+          "submit"
+        ]
+      }
+    },
+    {
+      "name": "browser_upload_file",
+      "description": "Upload a file to a file input element on the page",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "selector": {
+            "type": "string",
+            "description": "CSS selector of an input[type=file] element"
+          },
+          "filePath": {
+            "type": "string",
+            "description": "Absolute or relative local path of the file to upload"
+          }
+        },
+        "required": [
+          "selector",
+          "filePath"
+        ]
+      }
+    },
+    {
+      "name": "browser_wait",
+      "description": "Wait for a specified time in seconds",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "time": {
+            "type": "number",
+            "description": "Wait duration in seconds"
+          }
+        },
+        "required": [
+          "time"
+        ]
+      }
+    },
+    {
+      "name": "execute_script",
+      "description": "Execute arbitrary JavaScript code in the active browser tab and return the result",
+      "inputSchema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "JavaScript expression to evaluate"
+          },
+          "world": {
+            "description": "Execution world hint (currently accepted but not enforced)",
+            "type": "string",
+            "enum": [
+              "ISOLATED",
+              "MAIN"
+            ]
+          },
+          "timeoutMs": {
+            "description": "Timeout in milliseconds",
+            "type": "number"
+          },
+          "captureConsole": {
+            "description": "Capture console output during evaluation",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      }
+    }
+  ]
+}

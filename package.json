@@ -1,0 +1,42 @@
+{
+  "name": "browsermcp-extended-mcp",
+  "version": "2.0.0",
+  "description": "Local MCP server with 39 browser automation and HTTP/WebSocket inspection tools for BrowserMCP Extended.",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node tests/integration.mjs",
+    "check": "node scripts/check.mjs",
+    "docs:tools": "node scripts/generate-tool-reference.mjs",
+    "test:browser": "node tests/browser-network.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "ws": "^8.22.0",
+    "zod": "^4.6.7"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "license": "Apache-2.0",
+  "private": true,
+  "author": "NEO10111",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NEO10111/browsermcp-extended-mcp.git"
+  },
+  "homepage": "https://github.com/NEO10111/browsermcp-extended-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/NEO10111/browsermcp-extended-mcp/issues"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "browser-automation",
+    "chrome-extension",
+    "network-inspection",
+    "har"
+  ]
+}
